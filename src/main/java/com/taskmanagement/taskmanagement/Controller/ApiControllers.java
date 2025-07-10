@@ -30,18 +30,23 @@ public class ApiControllers {
         return "Welcome";
     }
 
-    @GetMapping(value ="/users")
+    @GetMapping(value ="/user")
     public List<User> getUsers() {
         return userRepo.findAll();
     }
 
-    @PostMapping(value = "/users")
+    @GetMapping(value = "/user/{id}")
+    public User getUserWithId(@PathVariable("id") long id) {
+        return userRepo.findById(id).get();
+    }
+
+    @PostMapping(value = "/user")
     public String saveUser(@RequestBody User user) {
         userRepo.save(user);
         return "Saved...";
     }
 
-    @PutMapping(value = "/users/{id}")
+    @PutMapping(value = "/user/{id}")
     public String updateUser(@PathVariable("id") long id, @RequestBody User user) {
         User updatedUser = userRepo.findById(id).get();
         updatedUser.setEmail(user.getEmail());
@@ -51,16 +56,21 @@ public class ApiControllers {
         return "Updated...";
     }
 
-    @DeleteMapping(value = "/users/{id}")
+    @DeleteMapping(value = "/user/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         User deleteUser = userRepo.findById(id).get();
         userRepo.delete(deleteUser);
         return "Deleted user with id: " + id;
     }
 
-        @GetMapping(value ="/task")
+    @GetMapping(value ="/task")
     public List<Task> getTask() {
         return taskRepo.findAll();
+    }
+
+    @GetMapping(value = "/task/{id}")
+    public Task getTaskWithId(@PathVariable("id") long id) {
+        return taskRepo.findById(id).get();
     }
 
     @PostMapping(value = "/task")
@@ -95,12 +105,12 @@ public class ApiControllers {
     }
 
     @GetMapping (value = "/task/report")
-    public String taskSummary() {
-        return "";
+    public List<Task> taskSummary() {
+        return taskRepo.getTaskSummary();
     }
 
-    @PostMapping (value = "task/{id}/assign/{userId}")
-    public String assignTask () {
+    @PutMapping (value = "task/{taskId}/assign/{userId}")
+    public String assignTask (@PathVariable("taskId") long taskId, @PathVariable("userId") long userId) {
         return "";
     }
 }

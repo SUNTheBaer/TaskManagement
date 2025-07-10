@@ -1,14 +1,18 @@
 package com.taskmanagement.taskmanagement.Models;
 
-import jakarta.persistence.CascadeType;
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.Data;
 
 @Data
@@ -26,12 +30,15 @@ public class Task {
     @Column(name = "description", nullable = true, columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "due_date", nullable = false, columnDefinition = "TEXT")
-    private String due_date;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "due_date", nullable = false)
+    private Date due_date;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "priority", nullable = false, columnDefinition = "TEXT")
     private priority priority;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, columnDefinition = "TEXT")
     private status status;
 
@@ -39,11 +46,11 @@ public class Task {
     @JoinColumn(name = "fk_user_id")
     private User user;
 
-    enum priority {
+    public enum priority {
         LOW, MEDIUM, HIGH
     }
 
-    enum status {
+    public enum status {
         TO_DO, IN_PROGRESS, COMPLETED
     }
 }
